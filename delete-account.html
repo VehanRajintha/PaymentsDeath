@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Deletion Request - AnyPay</title>
+    <style>
+        :root {
+            --bg-primary: #121212;
+            --bg-secondary: #1e1e1e;
+            --text-primary: #ffffff;
+            --text-secondary: #b3b3b3;
+            --accent: #FFD700;
+            --error: #ff4444;
+            --success: #00C853;
+            --input-bg: #2d2d2d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 2rem;
+        }
+
+        .description {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        input, textarea, select {
+            background-color: var(--input-bg);
+            border: 1px solid #404040;
+            border-radius: 6px;
+            padding: 0.8rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            width: 100%;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        button {
+            background-color: var(--accent);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 6px;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .success-message {
+            display: none;
+            color: var(--success);
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .error-message {
+            display: none;
+            color: var(--error);
+            text-align: center;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Account Deletion Request</h1>
+        <p class="description">Please fill out this form to request the deletion of your AnyPay account. We'll process your request within 48 hours.</p>
+        
+        <form id="deletionForm" onsubmit="submitForm(event)">
+            <div class="form-group">
+                <label for="email">Your Email Address*</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your registered email">
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number*</label>
+                <input type="tel" id="phone" name="phone" required placeholder="Enter your registered phone number">
+            </div>
+
+            <div class="form-group">
+                <label for="reason">Reason for Deletion*</label>
+                <select id="reason" name="reason" required>
+                    <option value="">Select a reason</option>
+                    <option value="privacy">Privacy concerns</option>
+                    <option value="not-using">Not using the service anymore</option>
+                    <option value="unsatisfied">Unsatisfied with service</option>
+                    <option value="other">Other reason</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="details">Additional Details</label>
+                <textarea id="details" name="details" placeholder="Please provide any additional information that might help us process your request"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" required>
+                    I understand that this action cannot be undone and all my data will be permanently deleted
+                </label>
+            </div>
+
+            <button type="submit">Submit Deletion Request</button>
+        </form>
+
+        <p id="successMessage" class="success-message">
+            Your account deletion request has been submitted successfully. We'll process it within 48 hours.
+        </p>
+        <p id="errorMessage" class="error-message">
+            An error occurred. Please try again or contact support.
+        </p>
+    </div>
+
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const data = {
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                reason: formData.get('reason'),
+                details: formData.get('details')
+            };
+
+            // Email configuration using mailto
+            const subject = `Account Deletion Request - ${data.email}`;
+            const body = `
+Account Deletion Request Details:
+
+Email: ${data.email}
+Phone: ${data.phone}
+Reason: ${data.reason}
+Additional Details: ${data.details}
+            `.trim();
+
+            // Create mailto link
+            const mailtoLink = `mailto:vehhanrajitha17@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+
+            // Show success message
+            document.getElementById('successMessage').style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('deletionForm').reset();
+        }
+    </script>
+</body>
+</html> 
